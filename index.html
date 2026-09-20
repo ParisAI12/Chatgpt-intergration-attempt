@@ -2,164 +2,184 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title> Tanishqa AI 💖</title>
+  <title>Tanishqa AI 💖</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
     * { box-sizing: border-box; }
+
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: #0f0a1f;
+      color: #f1f5f9;
       margin: 0;
       padding: 0;
       display: flex;
       justify-content: center;
-      align-items: flex-start;
       min-height: 100vh;
     }
+
     .container {
       width: 100%;
-      max-width: 800px;
-      margin: 32px 16px;
-      background: #020617;
-      border-radius: 16px;
-      border: 1px solid #1f2937;
-      padding: 20px;
-      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      max-width: 850px;
+      margin: 30px 16px;
+      background: #1a1333;
+      border-radius: 20px;
+      padding: 24px;
+      border: 1px solid #3b2a66;
+      box-shadow: 0 0 40px rgba(255, 0, 200, 0.15);
+      animation: fadeIn 0.8s ease;
     }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
     h1 {
-      margin-top: 0;
-      font-size: 1.6rem;
+      margin: 0;
+      font-size: 1.9rem;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      background: linear-gradient(90deg, #ff4dc4, #7f5cff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
     }
-    h1 span.logo {
-      width: 28px;
-      height: 28px;
-      border-radius: 999px;
-      background: radial-gradient(circle at 30% 30%, #22c55e, #0ea5e9);
-      display: inline-block;
+
+    .logo {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 30% 30%, #ff4dc4, #7f5cff);
+      box-shadow: 0 0 10px #ff4dc4;
     }
+
     #chat {
-      border-radius: 12px;
-      border: 1px solid #1f2937;
-      padding: 12px;
-      min-height: 220px;
-      max-height: 420px;
+      margin-top: 20px;
+      border-radius: 14px;
+      border: 1px solid #3b2a66;
+      padding: 16px;
+      min-height: 260px;
+      max-height: 450px;
       overflow-y: auto;
-      background: #020617;
+      background: #120d26;
     }
+
     .message {
-      margin-bottom: 12px;
+      margin-bottom: 14px;
       display: flex;
-      gap: 8px;
+      animation: fadeIn 0.4s ease;
     }
+
     .bubble {
-      padding: 10px 12px;
-      border-radius: 12px;
+      padding: 12px 14px;
+      border-radius: 14px;
       max-width: 80%;
       font-size: 0.95rem;
       line-height: 1.4;
       white-space: pre-wrap;
-      word-wrap: break-word;
     }
+
     .user .bubble {
-      background: #1d4ed8;
-      align-self: flex-end;
+      background: #7f5cff;
       margin-left: auto;
+      color: white;
+      box-shadow: 0 0 10px rgba(127, 92, 255, 0.4);
     }
+
     .assistant .bubble {
-      background: #111827;
-      border: 1px solid #1f2937;
-      align-self: flex-start;
+      background: #1e163d;
+      border: 1px solid #3b2a66;
       margin-right: auto;
     }
+
     .role {
       font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #9ca3af;
-      margin-bottom: 2px;
+      opacity: 0.7;
+      margin-bottom: 4px;
     }
+
     form {
-      margin-top: 16px;
+      margin-top: 20px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 10px;
     }
+
     textarea {
       width: 100%;
-      border-radius: 10px;
-      border: 1px solid #374151;
-      padding: 10px;
-      font-size: 0.95rem;
+      border-radius: 12px;
+      border: 1px solid #3b2a66;
+      padding: 12px;
+      font-size: 1rem;
+      background: #120d26;
+      color: #f1f5f9;
       resize: vertical;
-      min-height: 70px;
-      background: #020617;
-      color: #e5e7eb;
+      min-height: 80px;
     }
+
     textarea:focus {
-      outline: 1px solid #3b82f6;
-      border-color: #3b82f6;
+      outline: 2px solid #ff4dc4;
+      border-color: #ff4dc4;
     }
+
     button {
       align-self: flex-end;
-      padding: 8px 16px;
+      padding: 10px 20px;
       border-radius: 999px;
       border: none;
-      background: #3b82f6;
+      background: linear-gradient(90deg, #ff4dc4, #7f5cff);
       color: white;
       font-weight: 600;
       cursor: pointer;
-      font-size: 0.95rem;
+      font-size: 1rem;
+      box-shadow: 0 0 10px rgba(255, 0, 200, 0.3);
     }
+
     button:disabled {
       opacity: 0.6;
       cursor: default;
     }
+
     #status {
-      font-size: 0.8rem;
-      color: #9ca3af;
-      margin-top: 6px;
-      min-height: 16px;
+      font-size: 0.85rem;
+      opacity: 0.7;
+      min-height: 20px;
     }
-    .footer-note {
-      margin-top: 10px;
-      font-size: 0.75rem;
-      color: #6b7280;
+
+    .typing {
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      background: #ff4dc4;
+      border-radius: 50%;
+      margin-right: 4px;
+      animation: blink 1s infinite alternate;
     }
-    @media (max-width: 600px) {
-      .container {
-        margin: 16px 8px;
-        padding: 16px;
-      }
-      h1 { font-size: 1.3rem; }
+
+    @keyframes blink {
+      from { opacity: 0.2; }
+      to { opacity: 1; }
     }
   </style>
 </head>
+
 <body>
   <div class="container">
-    <h1><span class="logo"></span> My ChatGPT Site</h1>
-    <p style="font-size:0.9rem;color:#9ca3af;margin-top:4px;">
-      Type a question below and the AI will answer directly on this page.
-    </p>
+    <h1><span class="logo"></span> Tanishqa AI 💖</h1>
+    <p style="opacity:0.7;margin-top:6px;">Your personal AI companion. Ask anything.</p>
 
     <div id="chat"></div>
 
     <form id="chat-form">
-      <label for="question" style="font-size:0.85rem;color:#9ca3af;">Your question</label>
-      <textarea id="question" placeholder="Ask anything..."></textarea>
-      <button type="submit">Send</button>
+      <textarea id="question" placeholder="Ask Tanishqa AI something..."></textarea>
+      <button type="submit">Send 💖</button>
       <div id="status"></div>
-      <div class="footer-note">
-        Uses the OpenAI Chat Completions API (ChatGPT model). Don’t expose real keys in production.
-      </div>
     </form>
   </div>
 
   <script>
-    // 🔑 Replace this with your real OpenAI API key
     const API_KEY = "YOUR_OPENAI_API_KEY_HERE";
 
     const chatDiv = document.getElementById("chat");
@@ -177,7 +197,7 @@
 
       const roleLabel = document.createElement("div");
       roleLabel.className = "role";
-      roleLabel.textContent = role === "user" ? "You" : "Assistant";
+      roleLabel.textContent = role === "user" ? "You" : "Tanishqa AI 💖";
 
       const content = document.createElement("div");
       content.textContent = text;
@@ -190,8 +210,21 @@
       chatDiv.scrollTop = chatDiv.scrollHeight;
     }
 
+    function showTyping() {
+      statusDiv.innerHTML = `
+        <span class="typing"></span>
+        <span class="typing"></span>
+        <span class="typing"></span>
+        Tanishqa AI is thinking...
+      `;
+    }
+
+    function hideTyping() {
+      statusDiv.textContent = "";
+    }
+
     async function askChatGPT(question) {
-      statusDiv.textContent = "Thinking...";
+      showTyping();
       sendButton.disabled = true;
 
       try {
@@ -204,26 +237,20 @@
           body: JSON.stringify({
             model: "gpt-4o-mini",
             messages: [
-              { role: "system", content: "You are a helpful assistant answering questions on a personal website." },
+              { role: "system", content: "You are Tanishqa AI 💖, a sweet, friendly, helpful assistant." },
               { role: "user", content: question }
             ]
           })
         });
 
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error("API error:", errorText);
-          throw new Error("API request failed");
-        }
-
         const data = await response.json();
-        const answer = data.choices[0].message.content;
-        return answer;
+        return data.choices[0].message.content;
+
       } catch (err) {
         console.error(err);
-        return "Sorry, something went wrong talking to the AI.";
+        return "Oops! Something went wrong 💖";
       } finally {
-        statusDiv.textContent = "";
+        hideTyping();
         sendButton.disabled = false;
       }
     }
