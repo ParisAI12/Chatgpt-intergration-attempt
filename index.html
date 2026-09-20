@@ -5,9 +5,6 @@
   <title>Tanishqa AI 💖</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <!-- WebLLM (AI running in browser, no API needed) -->
-  <script src="https://cdn.jsdelivr.net/npm/webllm"></script>
-
   <style>
     * { box-sizing: border-box; }
 
@@ -185,21 +182,16 @@
     </form>
   </div>
 
-  <script>
-    let webllm;
+  <script type="module">
+    import * as webllm from "https://esm.run/@mlc-ai/web-llm";
 
-    async function loadModel() {
-      document.getElementById("status").textContent = "Loading AI model (first time may take 10–20 seconds)...";
+    const chatDiv = document.getElementById("chat");
+    const form = document.getElementById("chat-form");
+    const questionInput = document.getElementById("question");
+    const statusDiv = document.getElementById("status");
+    const sendButton = form.querySelector("button");
 
-      webllm = await webllmInit();
-      document.getElementById("status").textContent = "";
-    }
-
-    async function webllmInit() {
-      const engine = new webllm.WebLLM();
-      await engine.loadModel("Llama-3-8B-Instruct-q4f32_1");
-      return engine;
-    }
+    let engine = null;
 
     function addMessage(role, text) {
       const wrapper = document.createElement("div");
@@ -236,17 +228,37 @@
       statusDiv.textContent = "";
     }
 
+    async function initModel() {
+      statusDiv.textContent = "Loading AI model (first time may take a bit)...";
+
+      const initProgressCallback = (p) => {
+        statusDiv.textContent = "Loading model: " + Math.round(p.progress * 100) + "%";
+      };
+
+      engine = await webllm.CreateMLCEngine(
+        "Llama-3.1-8B-Instruct-q4f32_1-MLC",
+        { initProgressCallback }
+      );
+
+      statusDiv.textContent = "";
+    }
+
     async function askLocalAI(question) {
+      if (!engine) {
+        await initModel();
+      }
+
       showTyping();
       sendButton.disabled = true;
 
       try {
-        const response = await webllm.chatCompletion([
+        const messages = [
           { role: "system", content: "You are Tanishqa AI 💖, a sweet, friendly, helpful assistant." },
           { role: "user", content: question }
-        ]);
+        ];
 
-        return response.choices[0].message.content;
+        const reply = await engine.chat.completions.create({ messages });
+        return reply.choices[0].message.content;
 
       } catch (err) {
         console.error(err);
@@ -256,12 +268,6 @@
         sendButton.disabled = false;
       }
     }
-
-    const chatDiv = document.getElementById("chat");
-    const form = document.getElementById("chat-form");
-    const questionInput = document.getElementById("question");
-    const statusDiv = document.getElementById("status");
-    const sendButton = form.querySelector("button");
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
@@ -274,8 +280,6 @@
       const answer = await askLocalAI(question);
       addMessage("assistant", answer);
     });
-
-    loadModel();
   </script>
 </body>
 </html>
