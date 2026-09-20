@@ -5,6 +5,9 @@
   <title>Tanishqa AI 💖</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
 
+  <!-- WebLLM (AI running in browser, no API needed) -->
+  <script src="https://cdn.jsdelivr.net/npm/webllm"></script>
+
   <style>
     * { box-sizing: border-box; }
 
@@ -168,7 +171,10 @@
 <body>
   <div class="container">
     <h1><span class="logo"></span> Tanishqa AI 💖</h1>
-    <p style="opacity:0.7;margin-top:6px;">Your personal AI companion. Ask anything.</p>
+
+    <p style="opacity:0.7;margin-top:6px;font-size:1rem;">
+      <strong>TANISHQA I'M SORRY FOR THIS FORGIVE ME</strong>
+    </p>
 
     <div id="chat"></div>
 
@@ -180,13 +186,20 @@
   </div>
 
   <script>
-    const API_KEY = "YOUR_OPENAI_API_KEY_HERE";
+    let webllm;
 
-    const chatDiv = document.getElementById("chat");
-    const form = document.getElementById("chat-form");
-    const questionInput = document.getElementById("question");
-    const statusDiv = document.getElementById("status");
-    const sendButton = form.querySelector("button");
+    async function loadModel() {
+      document.getElementById("status").textContent = "Loading AI model (first time may take 10–20 seconds)...";
+
+      webllm = await webllmInit();
+      document.getElementById("status").textContent = "";
+    }
+
+    async function webllmInit() {
+      const engine = new webllm.WebLLM();
+      await engine.loadModel("Llama-3-8B-Instruct-q4f32_1");
+      return engine;
+    }
 
     function addMessage(role, text) {
       const wrapper = document.createElement("div");
@@ -223,28 +236,17 @@
       statusDiv.textContent = "";
     }
 
-    async function askChatGPT(question) {
+    async function askLocalAI(question) {
       showTyping();
       sendButton.disabled = true;
 
       try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${API_KEY}`
-          },
-          body: JSON.stringify({
-            model: "gpt-4o-mini",
-            messages: [
-              { role: "system", content: "You are Tanishqa AI 💖, a sweet, friendly, helpful assistant." },
-              { role: "user", content: question }
-            ]
-          })
-        });
+        const response = await webllm.chatCompletion([
+          { role: "system", content: "You are Tanishqa AI 💖, a sweet, friendly, helpful assistant." },
+          { role: "user", content: question }
+        ]);
 
-        const data = await response.json();
-        return data.choices[0].message.content;
+        return response.choices[0].message.content;
 
       } catch (err) {
         console.error(err);
@@ -255,6 +257,12 @@
       }
     }
 
+    const chatDiv = document.getElementById("chat");
+    const form = document.getElementById("chat-form");
+    const questionInput = document.getElementById("question");
+    const statusDiv = document.getElementById("status");
+    const sendButton = form.querySelector("button");
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const question = questionInput.value.trim();
@@ -263,9 +271,11 @@
       addMessage("user", question);
       questionInput.value = "";
 
-      const answer = await askChatGPT(question);
+      const answer = await askLocalAI(question);
       addMessage("assistant", answer);
     });
+
+    loadModel();
   </script>
 </body>
 </html>
